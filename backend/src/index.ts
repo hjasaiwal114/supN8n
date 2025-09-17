@@ -6,12 +6,14 @@ import {
   getWorkflow,
   listWorkflows,
   updateWorkflows,
+  createCredential,
+  deleteCredential
 } from "./store/inMemoryStore";
 import { IWorkflow } from "./interfaces";
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(expresnpm init vite my - react - flow - app-- --template reacts.json());
 
 app.get('/', (req, res) => {
   res.json({ ok: true, msg: "lets see " });
@@ -51,7 +53,16 @@ app.post("/workflow/:id/run", async (req, res) => {
     res.status(500).json({ error: String(err) });
   }
 });
-
+app.post("/credentaial", (req, res) => {
+  const { title, platform, data } = req.body;
+  if (!title || !platform || !data) return res.status(400).json({ error: "title" });
+  const c = createCredential(title, platform, data);
+  res.json(c);
+})
+app.delete("/credentails/:id", (req, res) => {
+  deleteCredential(Number(req.params.id));
+  res.json({ ok: true });
+})
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {

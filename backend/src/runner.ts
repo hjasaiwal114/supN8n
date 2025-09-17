@@ -1,4 +1,6 @@
 import { INode, IWorkflow } from "./interfaces";
+import { db } from "store/inMemoryStore";
+import axios from "axios";
 
 type NodeExecutor = (node: INode, input: any) => Promise<any>;
 const executors: Record<string, NodeExecutor> = {};
@@ -42,3 +44,17 @@ export async function runWorkflow(workflow: IWorkflow, startNodeId: string, init
   }
   return results;
 }
+
+executors.telegram = async (node, input) => {
+  if (!node.credentialsId) throw new Error("telegram bhai kha ho");
+  const cred = db.credentials.find((c) => c.id === node.credentialsId);
+  if (!cred) throw new Error("telegram credential not found");
+  const token = cred.data.api_key || cred.data.token;
+  if (!token) throw new Error("telegram token missing in credentials");
+  const chatId = node.parameters?.chat_id;
+  const template = node.parameters?.message ?? "{{body}}";
+  const message = template.replace("{body}}", JSON.stringify(input?.body ?? input));
+  const url = `https://api.telegram.org/bot${token}/sendMessage`;
+  const resp = await axios.post(url, { chat_id: chatId, text: message });
+  return resp.data;
+};

@@ -6,7 +6,7 @@ let webhookId = 1;
 
 export const db = {
   workflows: [] as IWorkflow[],
-  credtials: [] as any[],
+  credentials: [] as any[],
   webhooks: [] as any[],
 };
 
@@ -30,3 +30,16 @@ export function updateWorkflows(id: number, wf: Omit<IWorkflow, "id">) {
   db.workflows[idx] = { ...wf, id };
   return db.workflows[idx];
 }
+
+export function createCredential(title: string, platform: string, data: Record<string, any>) {
+  const row = { id: credentialId++, title, platform, data };
+  db.credentials.push(row);
+  return row;
+}
+
+export function deleteCredential(id: number) {
+  const idx = db.credentials.findIndex((c) => c.id === id);
+  if (idx !== -1) db.credentials.splice(idx, 1);
+}
+
+
