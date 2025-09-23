@@ -14,7 +14,7 @@ export function createWorkflow(wf: Omit<IWorkflow, "id">): IWorkflow {
   const row: IWorkflow = { ...wf, id: workflowedId++ };
   db.workflows.push(row);
   return row;
-}
+};
 
 export function getWorkflow(id: number) {
   return db.workflows.find((w) => w.id === id) ?? null;

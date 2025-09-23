@@ -4,12 +4,12 @@
     "target": "ES2020",
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "baseUrl": "backend/src",
+    "baseUrl": "./src",
     "outDir": "./dist",
     "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true, "types": ["node"]
   },
-  "include": ["backend/src/**/*"]
+  "include": ["src/**/*"]
 }
